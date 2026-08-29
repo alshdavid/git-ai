@@ -1,4 +1,5 @@
 mod cmd;
+mod platform;
 
 use clap::Parser;
 use clap::Subcommand;
@@ -32,7 +33,7 @@ struct EnvConfig {
   pub openai_api_token: Option<String>,
 
   /// Model ID to use (e.g., gpt-4o, deepseek-v4-flash)
-  #[arg(long = "model", env = "GITAI_OPENAI_MODEL")]
+  #[arg(long = "model", env = "GIT_AI_MODEL_ID")]
   pub model_id: String,
 
   /// GitHub Personal Access Token
