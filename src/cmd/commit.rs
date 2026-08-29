@@ -1,7 +1,6 @@
-use crate::{
-  EnvConfig,
-  platform::openai_api::{OpenAIConversation, OpenAIConversationOptions},
-};
+use crate::EnvConfig;
+use crate::platform::openai_api::OpenAIConversation;
+use crate::platform::openai_api::OpenAIConversationOptions;
 
 #[derive(Debug, clap::Parser)]
 pub struct CommitCommand {}
