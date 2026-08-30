@@ -151,7 +151,7 @@ jobs:
             gh release upload $TAG ${name}.tar.xz
             rm -rf ./*.tar.xz
 
-            zip ./$name.zip
+            zip ./$name.zip ./*
             gh release upload $TAG ${name}.zip
             rm -rf ./*.zip
           done
