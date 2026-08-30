@@ -115,7 +115,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
-        with: { path: artifacts }
+        with:
+          path: artifacts
+          merge-multiple: true
       - name: Publish` Github Release
         env:
           GH_TAG: ${{needs.vars.outputs.GH_TAG}}
@@ -138,6 +140,7 @@ jobs:
           gh release edit $TAG --title "🚀 Latest"
 
           cd artifacts
+          ls -la
 
           for name in *; do
             echo $name
