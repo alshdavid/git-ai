@@ -20,7 +20,7 @@ pub fn user(diffs: &BTreeMap<PathBuf, FileChange>) -> anyhow::Result<String> {
 
   reg.register_escape_fn(handlebars::no_escape);
 
-  let context = prepare_user_context(&diffs);
+  let context = prepare_user_context(diffs);
   let rendered = reg.render_template(USER_PROMPT, &context)?;
 
   Ok(rendered)

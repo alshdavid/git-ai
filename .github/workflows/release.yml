@@ -17,32 +17,22 @@ env:
   PROJECT_NAME: git-ai
 
 jobs:
-  test:
-    name: 🧪 Test
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - run: eval $(curl -sSf sh.davidalsh.com/just.sh | sh)
-      - run: eval $(curl -sSf sh.davidalsh.com/rust.sh | sh)
-      - run: just test
-
   format:
     name: 📝 Format
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: eval $(curl -sSf sh.davidalsh.com/just.sh | sh)
-      - run: eval $(curl -sSf sh.davidalsh.com/rust.sh | sh)
-      - run: just fmt
+      - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - run: cargo install xfmt
+      - run: cargo xfmt --check
 
   lint:
     name: 🤓 Lint
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: eval $(curl -sSf sh.davidalsh.com/just.sh | sh)
-      - run: eval $(curl -sSf sh.davidalsh.com/rust.sh | sh)
-      - run: just lint
+      - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - run: cargo clippy --all-targets --workspace -- -D warnings
 
   build:
     strategy:

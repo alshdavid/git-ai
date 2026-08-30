@@ -45,7 +45,7 @@ pub fn main(
     return Ok(());
   }
 
-  git::commit(&response)?;
+  git::commit(response)?;
 
   Ok(())
 }
