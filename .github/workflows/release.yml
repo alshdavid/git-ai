@@ -43,14 +43,20 @@ jobs:
             os: linux
             arch: amd64
             target: x86_64-unknown-linux-musl
-            run: rustup target add x86_64-unknown-linux-musl
+            run: |
+              sudo apt-get update
+              sudo apt-get install -y musl-tools
+              rustup target add x86_64-unknown-linux-musl
 
           - name: 🐥 Linux ARM64
             runner: ubuntu-24.04-arm
             os: linux
             arch: arm64
             target: aarch64-unknown-linux-musl
-            run: rustup target add aarch64-unknown-linux-musl
+            run: |
+              sudo apt-get update
+              sudo apt-get install -y musl-tools
+              rustup target add aarch64-unknown-linux-musl
 
           - name: 🍎 MacOS ARM64
             runner: macos-15
