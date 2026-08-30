@@ -141,7 +141,7 @@ jobs:
 
           for name in *; do
             echo $name
-            cd $name
+            cd $name/$name
             chmod +x ./*
 
             tar -czf ./$name.tar.gz ./*
@@ -156,7 +156,7 @@ jobs:
             gh release upload $TAG ${name}.zip
             rm -rf ./*.zip
 
-            cd ..
+            cd ../..
           done
 
           gh release edit $TAG --draft=false
