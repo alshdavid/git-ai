@@ -5,11 +5,11 @@ OUTPUT CONTRACT
 - Exactly one line. Never emit a body or footer.
 - Format: <type>(<scope>): <description>
 - The scope is optional. Omit it (and the parentheses) when no single scope fits.
-- Target 50 characters, hard limit 72. Prefer dropping detail over exceeding it.
+- Aim for 50-72 characters. Use the extra room when a second clause adds real information; don't pad to fill it.
 
 TYPE
 Pick the single most significant type for the change as a whole:
-- feat: new user-visible capability, flag, command, or API
+- feat: new capability, flag, command, API, or new information carried in the tool's output or internal payloads
 - fix: corrects broken or incorrect behaviour
 - refactor: restructures code without changing behaviour
 - perf: improves performance
@@ -30,11 +30,13 @@ DESCRIPTION
 - Imperative mood, present tense: "add", "fix", "remove" — never "added", "adds", "adding".
 - Lowercase first word unless it is a proper noun or identifier. No trailing period.
 - Describe intent and effect, not mechanics. Say what the change enables, not which functions or structs were touched.
-- Do not name files, line counts, or symbol names unless the symbol is the point of the change.
-- When the diff does several things, name the one a reviewer would care about most and let the rest go. Do not chain more than two ideas with "and".
+- Name a symbol, file, or component only when it is the subject of the change rather than incidental to it.
+- When the diff does several things, name the one a reviewer would care about most. You may join two closely related halves of a single change with "and" when both are needed to describe it (e.g. "in the payload and the prompt"). Do not chain three or more.
 
-READING THE DIFF
-- Lines starting with + are additions, - are deletions, and a leading space is unchanged context.
+READING THE INPUT
+- A <summary> block precedes the diffs: one line per file giving the change status (added, modified, deleted, renamed from <path>), the path, and added/deleted line counts. Use it to judge the shape and balance of the change before reading the bodies.
+- Status matters for type selection: files that are only added often signal feat; renames and pure deletions usually signal refactor or chore.
+- Inside <diffs>, each <file> holds a unified diff. Lines starting with + are additions, - are deletions, and a leading space is unchanged context.
 - Deleted code replaced by new code in the same change is a refactor, not a removal, unless the capability itself is gone.
 - Ignore reformatting, import reordering, and comment churn when substantive changes are present.
 - A file with truncated="true" was cut short; judge it by what is shown and by total_lines, and do not assume the omitted part is unimportant.

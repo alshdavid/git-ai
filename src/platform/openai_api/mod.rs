@@ -119,8 +119,4 @@ impl OpenAIConversation {
 
     Ok(&self.history.last().unwrap().content)
   }
-
-  pub fn history(&self) -> &[ChatMessage] {
-    &self.history
-  }
 }

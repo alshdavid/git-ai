@@ -2,7 +2,13 @@ Generate a one-line Conventional Commit message based on this diff. Output ONLY 
 
 <summary>
 {{#each files}}
+{{#if (eq kind "text")}}
 {{status}} {{path}} +{{additions}} -{{deletions}}{{#if truncated}} (truncated){{/if}}
+{{else if (eq kind "binary")}}
+{{status}} {{path}} (binary)
+{{else}}
+{{status}} {{path}} (skipped: {{reason}})
+{{/if}}
 {{/each}}
 </summary>
 
