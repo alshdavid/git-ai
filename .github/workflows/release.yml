@@ -83,13 +83,13 @@ jobs:
           os: "${{ matrix.config.os }}"
           arch: "${{ matrix.config.arch }}"
           profile: "release"
-        run: cargo build --target ${{ matrix.target }} --release
+        run: cargo build --target ${{ matrix.config.target }} --release
 
       - run: mkdir artifacts
       - env:
           EXE: ${{ runner.os == 'Windows' && '.exe' || '' }}
         run: |
-          cd target/${{ matrix.target }}/release
+          cd target/${{ matrix.config.target }}/release
           tar -czf ../../artifacts/git-ai-${{matrix.os}}-${{matrix.arch}}.tar.gz ./git-ai$EXE
           tar -cJf ../../artifacts/git-ai-${{matrix.os}}-${{matrix.arch}}.tar.xz ./git-ai$EXE
           zip ../../artifacts/git-ai-${{matrix.os}}-${{matrix.arch}}.zip ./git-ai$EXE
