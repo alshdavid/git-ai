@@ -96,9 +96,9 @@ jobs:
           EXE: ${{ runner.os == 'Windows' && '.exe' || '' }}
         run: |
           cd target/${{ matrix.config.target }}/release
-          tar -czf ../../artifacts/git-ai-${{matrix.os}}-${{matrix.arch}}.tar.gz ./git-ai$EXE
-          tar -cJf ../../artifacts/git-ai-${{matrix.os}}-${{matrix.arch}}.tar.xz ./git-ai$EXE
-          zip ../../artifacts/git-ai-${{matrix.os}}-${{matrix.arch}}.zip ./git-ai$EXE
+          tar -czf ../../artifacts/git-ai-${{matrix.config.os}}-${{matrix.config.arch}}.tar.gz ./git-ai$EXE
+          tar -cJf ../../artifacts/git-ai-${{matrix.config.os}}-${{matrix.config.arch}}.tar.xz ./git-ai$EXE
+          zip ../../artifacts/git-ai-${{matrix.config.os}}-${{matrix.config.arch}}.zip ./git-ai$EXE
       - run: ls -l ./artifacts
 
       - uses: actions/upload-artifact@v4
