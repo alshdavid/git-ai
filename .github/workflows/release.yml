@@ -92,9 +92,12 @@ jobs:
         run: cargo build --target ${{ matrix.config.target }} --release
 
       - run: mkdir -p artifacts/${{ matrix.config.os }}-${{ matrix.config.arch }}
+      - run: ls -la artifacts
       - env:
           EXE: ${{ runner.os == 'Windows' && '.exe' || '' }}
         run: cp target/${{ matrix.config.target }}/release/git-ai$EXE ./artifacts/${{ matrix.config.os }}-${{ matrix.config.arch }}
+      - run: ls -la artifacts
+      - run: ls -la artifacts/${{ matrix.config.os }}-${{ matrix.config.arch }}
 
       - uses: actions/upload-artifact@v7
         with:
