@@ -133,7 +133,8 @@ jobs:
 
           echo "Tag: ${TAG}"
 
-          gh release create $TAG  --draft --notes "Automatically built binaries"
+          gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
+          gh release create $TAG --draft --notes "Automatically built binaries"
           gh release edit $TAG --title "🚀 Latest"
 
           cd artifacts
