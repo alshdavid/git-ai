@@ -8,6 +8,7 @@ pub enum Role {
   System,
   User,
   Assistant,
+  Developer,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,12 +23,15 @@ pub struct OpenAIConversationOptions {
   pub openai_api_token: Option<String>,
   pub model: String,
   pub system_prompt: Option<String>,
+  pub reasoning_effort: Option<String>,
 }
 
 #[derive(Serialize)]
 struct ChatCompletionRequest<'a> {
   model: &'a str,
   messages: &'a [ChatMessage],
+  #[serde(skip_serializing_if = "Option::is_none")]
+  reasoning_effort: Option<&'a str>,
 }
 
 // Response payload structure
@@ -76,6 +80,7 @@ impl OpenAIConversation {
     let payload = ChatCompletionRequest {
       model: &self.options.model,
       messages: &self.history,
+      reasoning_effort: self.options.reasoning_effort.as_deref(),
     };
 
     let endpoint = if self.options.openai_api_url.ends_with("/chat/completions") {
