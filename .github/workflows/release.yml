@@ -21,7 +21,7 @@ jobs:
     name: 📝 Format
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - run: cargo install cargo-xfmt
       - run: cargo xfmt --check
@@ -30,7 +30,7 @@ jobs:
     name: 🤓 Lint
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - run: cargo clippy --all-targets --workspace -- -D warnings
 
@@ -81,7 +81,7 @@ jobs:
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.runner }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - if: matrix.config.run
         run: ${{ matrix.config.run }}
@@ -91,17 +91,12 @@ jobs:
           profile: "release"
         run: cargo build --target ${{ matrix.config.target }} --release
 
-      - run: mkdir artifacts
+      - run: mkdir -p artifacts/${{ matrix.config.os }}-${{ matrix.config.arch }}
       - env:
           EXE: ${{ runner.os == 'Windows' && '.exe' || '' }}
-        run: |
-          cd target/${{ matrix.config.target }}/release
-          tar -czf ../../../artifacts/git-ai-${{matrix.config.os}}-${{matrix.config.arch}}.tar.gz ./git-ai$EXE
-          tar -cJf ../../../artifacts/git-ai-${{matrix.config.os}}-${{matrix.config.arch}}.tar.xz ./git-ai$EXE
-          zip ../../../artifacts/git-ai-${{matrix.config.os}}-${{matrix.config.arch}}.zip ./git-ai$EXE
-      - run: ls -l ./artifacts
+        run: cp target/${{ matrix.config.target }}/release/git-ai$EXE ./artifacts/${{ matrix.config.os }}-${{ matrix.config.arch }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ env.PROJECT_NAME }}-${{ matrix.config.os }}-${{ matrix.config.arch }}
           path: ${{ github.workspace }}/artifacts/**/*
@@ -118,8 +113,8 @@ jobs:
       - lint
       - build
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with: { path: artifacts }
       - name: Publish` Github Release
         env:
