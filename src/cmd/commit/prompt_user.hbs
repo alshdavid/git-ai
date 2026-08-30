@@ -15,7 +15,7 @@ Generate a one-line Conventional Commit message based on this diff. Output ONLY 
 <diffs>
 {{#each files}}
 {{#if (eq kind "text")}}
-<file path="{{path}}" type="text" total_lines="{{diff_size}}" truncated="{{truncated}}">
+<file>
 {{{details}}}
 </file>
 {{/if}}
