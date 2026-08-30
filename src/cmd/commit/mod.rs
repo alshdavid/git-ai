@@ -11,8 +11,8 @@ pub struct CommitCommand {
   #[arg(short = 'l', long = "max-lines-per-file", default_value = "400")]
   pub max_lines_per_file: usize,
 
-  #[arg(long = "reasoning-effort", default_value = "high")]
-  pub reasoning_effort: String,
+  #[arg(long = "reasoning-effort")]
+  pub reasoning_effort: Option<String>,
 
   #[arg(long = "dry")]
   pub dry_run: bool,
@@ -32,7 +32,7 @@ pub fn main(
     openai_api_token: env.openai_api_token,
     model: env.model_id,
     system_prompt: Some(prompt::system().to_string()),
-    reasoning_effort: Some(args.reasoning_effort),
+    reasoning_effort: args.reasoning_effort,
   };
 
   let mut conversation = OpenAIConversation::new(options);
