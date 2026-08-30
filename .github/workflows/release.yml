@@ -141,6 +141,9 @@ jobs:
 
           for name in *; do
             echo $name
+            ls -la
+            cd $name
+            ls -la
             cd $name/$name
             chmod +x ./*
 
