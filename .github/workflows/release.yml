@@ -133,16 +133,27 @@ jobs:
 
           echo "Tag: ${TAG}"
 
-          # gh release create $TAG  --draft --notes "Automatically built binaries"
-          # gh release edit $TAG --title "🚀 Latest"
-
-          ls -l
-          ls -l artifacts
+          gh release create $TAG  --draft --notes "Automatically built binaries"
+          gh release edit $TAG --title "🚀 Latest"
 
           cd artifacts
+
           for name in *; do
             echo $name
-            # gh release upload $TAG ${name}.tar.gz
+            cd $name
+            chmod +x ./*
+
+            tar -czf ./$name.tar.gz ./*
+            gh release upload $TAG ${name}.tar.gz
+            rm -rf ./*.tar.gz
+
+            tar -cJf ./$name.tar.xz ./*
+            gh release upload $TAG ${name}.tar.xz
+            rm -rf ./*.tar.xz
+
+            zip ./$name.zip
+            gh release upload $TAG ${name}.zip
+            rm -rf ./*.zip
           done
 
-          # gh release edit $TAG --draft=false
+          gh release edit $TAG --draft=false
