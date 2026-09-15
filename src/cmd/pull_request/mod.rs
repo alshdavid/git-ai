@@ -3,8 +3,8 @@ mod prompt;
 use crate::EnvConfig;
 use crate::platform::gh;
 use crate::platform::git;
-use crate::platform::openai_api::OpenAIConversation;
-use crate::platform::openai_api::OpenAIConversationOptions;
+use crate::platform::agent::openai_api::OpenAIConversation;
+use crate::platform::agent::openai_api::OpenAIConversationOptions;
 
 #[derive(Debug, clap::Parser)]
 pub struct PullRequestCommand {
