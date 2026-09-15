@@ -1,9 +1,9 @@
 mod prompt;
 
 use crate::EnvConfig;
+use crate::platform::agent::openai_api::OpenAIConversation;
+use crate::platform::agent::openai_api::OpenAIConversationOptions;
 use crate::platform::git;
-use crate::platform::openai_api::OpenAIConversation;
-use crate::platform::openai_api::OpenAIConversationOptions;
 
 #[derive(Debug, clap::Parser)]
 pub struct CommitCommand {
@@ -38,7 +38,7 @@ pub fn main(
   let mut conversation = OpenAIConversation::new(options);
 
   let response = conversation.submit(&rendered)?;
-  println!("{}", response);
+  println!("{}\n", response);
 
   if args.dry_run {
     println!("Skipping commit");
