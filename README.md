@@ -71,4 +71,36 @@ docs: add README documenting git-ai CLI usage and options
  create mode 100644 README.md
 
 git(foo) $ git ai pr
+
+Using base branch 'main'
+----------------------------------------
+Target Branch: main
+Generated Title: docs: add README for git-ai CLI usage
+Generated Body:
+- Add a new README.md introducing the Git AI Tools project.
+- Document the `git ai` command-line usage, including the `commit`, `pull-request`, and `help` subcommands.
+- List CLI options and their environment variables for API URL, token, model ID, and GitHub token.
+- Include an example walkthrough showing `git ai commit` and `git ai pr` in action.
+----------------------------------------
+Pushing branch 'foo' to remote...
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 1.09 KiB | 1.09 MiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+remote: 
+remote: Create a pull request for 'foo' on GitHub by visiting:
+remote:      https://github.com/alshdavid/git-ai/pull/new/foo
+remote: 
+To github.com:alshdavid/git-ai.git
+ * [new branch]      foo -> foo
+branch 'foo' set up to track 'origin/foo'.
+Creating Pull Request...
+
+Creating pull request for foo into main in alshdavid/git-ai
+
+https://github.com/alshdavid/git-ai/pull/2
+PR created successfully!
 ```
