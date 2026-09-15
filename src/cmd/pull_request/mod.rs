@@ -117,13 +117,24 @@ pub fn main(
     return Ok(());
   }
 
-  // 6. Push the branch and create the PR via the GitHub CLI
+  // 6. Push the branch to the remote
   println!("Pushing branch '{}' to remote...", current_branch);
   git::push_branch(&current_branch)?;
 
-  println!("Creating Pull Request...");
-  gh::create_pull_request(&base, &generated.title, &generated.body)?;
+  // 7. Update the existing pull request for this branch if one is open,
+  //    otherwise create a new one.
+  match gh::find_pull_request(&current_branch)? {
+    Some(number) => {
+      println!("Updating existing Pull Request #{number}...");
+      gh::edit_pull_request(number, &base, &generated.title, &generated.body)?;
+      println!("PR #{number} updated successfully!");
+    }
+    None => {
+      println!("Creating Pull Request...");
+      gh::create_pull_request(&base, &generated.title, &generated.body)?;
+      println!("PR created successfully!");
+    }
+  }
 
-  println!("PR created successfully!");
   Ok(())
 }
