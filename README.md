@@ -1,5 +1,7 @@
 # Git AI Tools
 
+This is a CLI tool that uses AI to automatically summarize commit messages and PRs.
+
 ```
 git(main) $ git ai help
 

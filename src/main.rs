@@ -18,17 +18,17 @@ struct EnvConfig {
   /// Base URL for OpenAI-compatible API endpoints
   #[arg(
     long = "openai-api-url",
-    env = "GIT_AI_OPENAI_API_URL",
     env = "OPENAI_BASE_URL",
-    env = "OPENAI_API_BASE"
+    env = "OPENAI_API_BASE",
+    env = "GIT_AI_OPENAI_API_URL",
   )]
   pub openai_api_url: String,
 
   /// API token for OpenAI or compatible provider
   #[arg(
     long = "openai-api-token",
+    env = "OPENAI_API_KEY",
     env = "GIT_AI_OPENAI_API_KEY",
-    env = "OPENAI_API_KEY"
   )]
   pub openai_api_token: Option<String>,
 
