@@ -20,7 +20,7 @@ struct EnvConfig {
     long = "openai-api-url",
     env = "OPENAI_BASE_URL",
     env = "OPENAI_API_BASE",
-    env = "GIT_AI_OPENAI_API_URL",
+    env = "GIT_AI_OPENAI_API_URL"
   )]
   pub openai_api_url: String,
 
@@ -28,7 +28,7 @@ struct EnvConfig {
   #[arg(
     long = "openai-api-token",
     env = "OPENAI_API_KEY",
-    env = "GIT_AI_OPENAI_API_KEY",
+    env = "GIT_AI_OPENAI_API_KEY"
   )]
   pub openai_api_token: Option<String>,
 
