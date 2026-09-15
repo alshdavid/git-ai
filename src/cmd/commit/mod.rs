@@ -1,9 +1,9 @@
 mod prompt;
 
 use crate::EnvConfig;
-use crate::platform::git;
 use crate::platform::agent::openai_api::OpenAIConversation;
 use crate::platform::agent::openai_api::OpenAIConversationOptions;
+use crate::platform::git;
 
 #[derive(Debug, clap::Parser)]
 pub struct CommitCommand {

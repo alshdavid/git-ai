@@ -1,16 +1,17 @@
 mod prompt;
 
 use crate::EnvConfig;
-use crate::platform::gh;
-use crate::platform::git;
 use crate::platform::agent::openai_api::OpenAIConversation;
 use crate::platform::agent::openai_api::OpenAIConversationOptions;
+use crate::platform::gh;
+use crate::platform::git;
 
 #[derive(Debug, clap::Parser)]
 pub struct PullRequestCommand {
-  /// The branch to open the pull request against
-  #[arg(long = "base", default_value = "master")]
-  pub base: String,
+  /// The branch to open the pull request against.
+  /// Defaults to the repository's default branch as reported by GitHub.
+  #[arg(long = "base")]
+  pub base: Option<String>,
 
   #[arg(long = "reasoning-effort", default_value = "high")]
   pub reasoning_effort: String,
@@ -65,21 +66,30 @@ pub fn main(
   // 1. Ensure inside a git repo and determine the current branch
   let current_branch = git::current_branch()?;
 
-  // 2. Refuse to open a PR from the target base branch
-  if current_branch == args.base {
-    anyhow::bail!(
-      "You are currently on '{base}'. Switch to a feature branch first.",
-      base = args.base
-    );
+  // 2. Resolve the base branch: use the supplied value, otherwise ask GitHub
+  //    for the repository's default branch.
+  let base = match args.base {
+    Some(base) => base,
+    None => {
+      println!("No --base supplied, detecting default branch via GitHub...");
+      let base = gh::default_branch()?;
+      println!("Using base branch '{}'", base);
+      base
+    }
+  };
+
+  // 3. Refuse to open a PR from the target base branch
+  if current_branch == base {
+    anyhow::bail!("You are currently on '{base}'. Switch to a feature branch first.");
   }
 
-  // 3. Get diff against the target branch
-  let diff = git::get_branch_diff(&args.base)?;
+  // 4. Get diff against the target branch
+  let diff = git::get_branch_diff(&base)?;
   if diff.trim().is_empty() {
-    anyhow::bail!("No diff found between HEAD and '{}'.", args.base);
+    anyhow::bail!("No diff found between HEAD and '{base}'.");
   }
 
-  // 4. Generate the PR title and description using the model
+  // 5. Generate the PR title and description using the model
   let rendered = prompt::user(&diff)?;
 
   let options = OpenAIConversationOptions {
@@ -96,7 +106,7 @@ pub fn main(
   let generated = parse_generated(response, &current_branch);
 
   println!("----------------------------------------");
-  println!("Target Branch: {}", args.base);
+  println!("Target Branch: {}", base);
   println!("Generated Title: {}", generated.title);
   println!("Generated Body:");
   println!("{}", generated.body);
@@ -107,12 +117,12 @@ pub fn main(
     return Ok(());
   }
 
-  // 5. Push the branch and create the PR via the GitHub CLI
+  // 6. Push the branch and create the PR via the GitHub CLI
   println!("Pushing branch '{}' to remote...", current_branch);
   git::push_branch(&current_branch)?;
 
   println!("Creating Pull Request...");
-  gh::create_pull_request(&args.base, &generated.title, &generated.body)?;
+  gh::create_pull_request(&base, &generated.title, &generated.body)?;
 
   println!("PR created successfully!");
   Ok(())
