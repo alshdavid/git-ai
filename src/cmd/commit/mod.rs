@@ -38,7 +38,7 @@ pub fn main(
   let mut conversation = OpenAIConversation::new(options);
 
   let response = conversation.submit(&rendered)?;
-  println!("{}", response);
+  println!("{}\n", response);
 
   if args.dry_run {
     println!("Skipping commit");
