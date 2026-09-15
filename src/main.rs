@@ -20,7 +20,8 @@ struct EnvConfig {
     long = "openai-api-url",
     env = "OPENAI_BASE_URL",
     env = "OPENAI_API_BASE",
-    env = "GIT_AI_OPENAI_API_URL"
+    env = "GIT_AI_OPENAI_API_URL",
+    hide_env_values = true
   )]
   pub openai_api_url: String,
 
@@ -28,16 +29,17 @@ struct EnvConfig {
   #[arg(
     long = "openai-api-token",
     env = "OPENAI_API_KEY",
-    env = "GIT_AI_OPENAI_API_KEY"
+    env = "GIT_AI_OPENAI_API_KEY",
+    hide_env_values = true
   )]
   pub openai_api_token: Option<String>,
 
   /// Model ID to use (e.g., gpt-4o, deepseek-v4-flash)
-  #[arg(long = "model", env = "GIT_AI_MODEL_ID")]
+  #[arg(long = "model", env = "GIT_AI_MODEL_ID", hide_env_values = true)]
   pub model_id: String,
 
   /// GitHub Personal Access Token
-  #[arg(long = "gh-token", env = "GH_TOKEN")]
+  #[arg(long = "gh-token", env = "GH_TOKEN", hide_env_values = true)]
   pub gh_token: Option<String>,
 }
 
