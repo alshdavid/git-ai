@@ -109,7 +109,7 @@ PR created successfully!
 
 # Installation
 
-```
+```bash
 # Linux AMD64
 curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-ai-linux-amd64.tar.gz | tar -xvzf - -C $HOME/.local/bin
 
