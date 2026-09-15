@@ -109,6 +109,7 @@ PR created successfully!
 
 # Installation
 
+```
 # Linux AMD64
 curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-ai-linux-amd64.tar.gz | tar -xvzf - -C $HOME/.local/bin
 
@@ -124,3 +125,4 @@ curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-a
 # Add to PATH if not already there:
 echo "\nexport \PATH=\$PATH:\$HOME/.local/bin\n" >> $HOME/.zshrc
 echo "\nexport \PATH=\$PATH:\$HOME/.local/bin\n" >> $HOME/.bashrc
+```
