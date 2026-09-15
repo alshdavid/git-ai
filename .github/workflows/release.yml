@@ -35,6 +35,10 @@ jobs:
           var=$var+1
           VERSION="0.0.$var"
 
+          if [ "$VERSION" = "0.0." ]; then
+            exit 1
+          fi
+
           echo $VERSION
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -133,9 +137,8 @@ jobs:
   publish_github_release:
     name: "🔄 Publish Github Release"
     runs-on: ubuntu-24.04
-    outputs:
-      VERSION: ${{ steps.tag.outputs.VERSION }}
     needs:
+      - version
       - build
     steps:
       - uses: actions/checkout@v7
@@ -182,18 +185,18 @@ jobs:
 
           gh release edit $VERSION --draft=false
 
-  publish_crates_io:
-    name: "🔁 Publish: Crate"
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - uses: actions/checkout@v7
-      - run: eval $(curl -sSf sh.davidalsh.com/rust.sh | sh)
-      - env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_API_TOKEN }}
-          VERSION: ${{needs.version.outputs.VERSION}}
-        run: |
-          set -e
-          sed "s/0.0.0-local/${VERSION}/g" "Cargo.toml" > "Cargo.toml.new" && mv "Cargo.toml.new" "Cargo.toml"
-          cargo publish --allow-dirty
+  # publish_crates_io:
+  #   name: "🔁 Publish: Crate"
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build
+  #   steps:
+  #     - uses: actions/checkout@v7
+  #     - run: eval $(curl -sSf sh.davidalsh.com/rust.sh | sh)
+  #     - env:
+  #         CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_API_TOKEN }}
+  #         VERSION: ${{needs.version.outputs.VERSION}}
+  #       run: |
+  #         set -e
+  #         sed "s/0.0.0-local/${VERSION}/g" "Cargo.toml" > "Cargo.toml.new" && mv "Cargo.toml.new" "Cargo.toml"
+  #         cargo publish --allow-dirty
