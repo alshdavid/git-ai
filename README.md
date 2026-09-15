@@ -106,3 +106,21 @@ Creating pull request for foo into main in alshdavid/git-ai
 https://github.com/alshdavid/git-ai/pull/2
 PR created successfully!
 ```
+
+# Installation
+
+# Linux AMD64
+curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-ai-linux-amd64.tar.gz | tar -xvzf - -C $HOME/.local/bin
+
+# Linux ARM64
+curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-ai-linux-arm64.tar.gz | tar -xvzf - -C $HOME/.local/bin
+
+# MacOS ARM64 (Apple Silicon)
+curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-ai-macos-arm64.tar.gz | tar -xvzf - -C $HOME/.local/bin 
+
+# MacOS AMD64 (Intel)
+curl -L --url https://github.com/alshdavid/git-ai/releases/latest/download/git-ai-macos-amd64.tar.gz | tar -xvzf - -C $HOME/.local/bin
+
+# Add to PATH if not already there:
+echo "\nexport \PATH=\$PATH:\$HOME/.local/bin\n" >> $HOME/.zshrc
+echo "\nexport \PATH=\$PATH:\$HOME/.local/bin\n" >> $HOME/.bashrc
