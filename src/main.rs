@@ -59,15 +59,12 @@ enum Commands {
 fn main() -> anyhow::Result<()> {
   let command = Command::parse();
 
-  match command.command {
-    Commands::Update(args) => return cmd::update::main(args),
-    _ => {}
+  if let Commands::Update(args) = command.command {
+    return cmd::update::main(args);
   }
 
-  let has_update: JoinHandle<anyhow::Result<Option<String>>> = thread::spawn(|| {
-    // Check for update and return Some(message) if an update is available
-    Ok(None)
-  });
+  let has_update: JoinHandle<anyhow::Result<Option<String>>> =
+    thread::spawn(cmd::update::available_update);
 
   match command.command {
     Commands::Commit(args) => cmd::commit::main(args)?,

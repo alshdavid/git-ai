@@ -18,6 +18,25 @@ pub struct UpdateCommand {
   pub check: bool,
 }
 
+pub fn available_update() -> anyhow::Result<Option<String>> {
+  let options = UpgradeOptions {
+    target_repo: TARGET_REPO,
+    current_version: VERSION,
+  };
+
+  let LatestRelease::Available(version) = check_for_update(&options)? else {
+    return Ok(None);
+  };
+
+  Ok(Some(notice(&version)))
+}
+
+fn notice(version: &semver::Version) -> String {
+  format!(
+    "A new version of git-ai is available ({VERSION} -> {version})\nRun `git-ai update` to install it"
+  )
+}
+
 pub fn main(args: UpdateCommand) -> anyhow::Result<()> {
   let options = UpgradeOptions {
     target_repo: TARGET_REPO,
