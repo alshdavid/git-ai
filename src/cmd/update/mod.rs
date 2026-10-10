@@ -33,7 +33,7 @@ pub fn available_update() -> anyhow::Result<Option<String>> {
 
 fn notice(version: &semver::Version) -> String {
   format!(
-    "A new version of git-ai is available ({VERSION} -> {version})\nRun `git-ai update` to install it"
+    "⚡ A new version of git-ai is available ({VERSION} -> {version})\nRun `git-ai update` to install it"
   )
 }
 
