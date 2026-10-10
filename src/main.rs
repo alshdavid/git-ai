@@ -41,6 +41,10 @@ struct EnvConfig {
   /// GitHub Personal Access Token
   #[arg(long = "gh-token", env = "GH_TOKEN", hide_env_values = true)]
   pub gh_token: Option<String>,
+
+  /// Version of the git-ai binary
+  #[arg(skip = env!("CARGO_PKG_VERSION"))]
+  pub version: String,
 }
 
 #[derive(Debug, Subcommand)]
@@ -51,6 +55,9 @@ enum Commands {
   /// Create a GitHub PR with any automatically generated title and description
   #[clap(name = "pull-request", alias = "pr")]
   PullRequest(cmd::pull_request::PullRequestCommand),
+  /// Update git-ai to the latest release
+  #[clap(name = "update", alias = "up")]
+  Update(cmd::update::UpdateCommand),
 }
 
 fn main() -> anyhow::Result<()> {
@@ -58,5 +65,6 @@ fn main() -> anyhow::Result<()> {
   match command.command {
     Commands::Commit(args) => cmd::commit::main(command.env, args),
     Commands::PullRequest(args) => cmd::pull_request::main(command.env, args),
+    Commands::Update(args) => cmd::update::main(command.env, args),
   }
 }
