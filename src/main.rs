@@ -1,6 +1,9 @@
 mod cmd;
 mod platform;
 
+use std::thread;
+use std::thread::JoinHandle;
+
 use clap::Parser;
 use clap::Subcommand;
 
@@ -55,9 +58,26 @@ enum Commands {
 
 fn main() -> anyhow::Result<()> {
   let command = Command::parse();
+
   match command.command {
-    Commands::Commit(args) => cmd::commit::main(args),
-    Commands::PullRequest(args) => cmd::pull_request::main(args),
-    Commands::Update(args) => cmd::update::main(args),
+    Commands::Update(args) => return cmd::update::main(args),
+    _ => {}
   }
+
+  let has_update: JoinHandle<anyhow::Result<Option<String>>> = thread::spawn(|| {
+    // Check for update and return Some(message) if an update is available
+    Ok(None)
+  });
+
+  match command.command {
+    Commands::Commit(args) => cmd::commit::main(args)?,
+    Commands::PullRequest(args) => cmd::pull_request::main(args)?,
+    Commands::Update(_) => unreachable!(),
+  };
+
+  if let Ok(Ok(Some(update_message))) = has_update.join() {
+    println!("\n{}", update_message);
+  }
+
+  Ok(())
 }
