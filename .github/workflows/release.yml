@@ -161,7 +161,7 @@ jobs:
           echo "Tag: ${VERSION}"
 
           gh release delete "$VERSION" --yes --cleanup-tag 2>/dev/null || true
-          gh release create $VERSION --draft --notes "Automatically built binaries"
+          gh release create $VERSION --draft --notes ""
           gh release edit "$VERSION" --title "v${VERSION}"
 
           cd artifacts
