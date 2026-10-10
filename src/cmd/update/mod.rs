@@ -1,8 +1,8 @@
-use crate::self_upgrade::LatestRelease;
-use crate::self_upgrade::UpgradeOptions;
-use crate::self_upgrade::UpgradeOutcome;
-use crate::self_upgrade::check_for_update;
-use crate::self_upgrade::try_upgrade;
+use crate::platform::self_upgrade::LatestRelease;
+use crate::platform::self_upgrade::UpgradeOptions;
+use crate::platform::self_upgrade::UpgradeOutcome;
+use crate::platform::self_upgrade::check_for_update;
+use crate::platform::self_upgrade::try_upgrade;
 
 const TARGET_REPO: &str = "alshdavid/git-ai";
 const VERSION: &str = env!("CARGO_PKG_VERSION");

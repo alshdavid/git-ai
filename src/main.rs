@@ -1,6 +1,5 @@
 mod cmd;
 mod platform;
-mod self_upgrade;
 
 use clap::Parser;
 use clap::Subcommand;
