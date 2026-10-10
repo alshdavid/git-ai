@@ -23,6 +23,12 @@ pub struct CommitCommand {
 
 pub fn main(args: CommitCommand) -> anyhow::Result<()> {
   let diffs = crate::platform::git::get_staged_diff(args.max_lines_per_file)?;
+
+  if diffs.is_empty() {
+    println!("Nothing staged to commit");
+    return Ok(());
+  }
+
   let rendered = prompt::user(&diffs)?;
 
   println!("{}", rendered);
