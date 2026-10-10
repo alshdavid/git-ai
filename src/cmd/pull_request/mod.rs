@@ -18,6 +18,9 @@ pub struct PullRequestCommand {
 
   #[arg(long = "dry")]
   pub dry_run: bool,
+
+  #[command(flatten)]
+  pub env: EnvConfig,
 }
 
 struct GeneratedPr {
@@ -59,10 +62,7 @@ fn parse_generated(
   GeneratedPr { title, body }
 }
 
-pub fn main(
-  env: EnvConfig,
-  args: PullRequestCommand,
-) -> anyhow::Result<()> {
+pub fn main(args: PullRequestCommand) -> anyhow::Result<()> {
   // 1. Ensure inside a git repo and determine the current branch
   let current_branch = git::current_branch()?;
 
@@ -93,9 +93,9 @@ pub fn main(
   let rendered = prompt::user(&diff)?;
 
   let options = OpenAIConversationOptions {
-    openai_api_url: env.openai_api_url,
-    openai_api_token: env.openai_api_token,
-    model: env.model_id,
+    openai_api_url: args.env.openai_api_url,
+    openai_api_token: args.env.openai_api_token,
+    model: args.env.model_id,
     system_prompt: Some(prompt::system().to_string()),
     reasoning_effort: Some(args.reasoning_effort),
   };

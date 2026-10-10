@@ -1,5 +1,6 @@
 mod cmd;
 mod platform;
+mod self_upgrade;
 
 use clap::Parser;
 use clap::Subcommand;
@@ -8,9 +9,6 @@ use clap::Subcommand;
 struct Command {
   #[clap(subcommand)]
   command: Commands,
-
-  #[command(flatten)]
-  pub env: EnvConfig,
 }
 
 #[derive(Debug, clap::Args)]
@@ -41,10 +39,6 @@ struct EnvConfig {
   /// GitHub Personal Access Token
   #[arg(long = "gh-token", env = "GH_TOKEN", hide_env_values = true)]
   pub gh_token: Option<String>,
-
-  /// Version of the git-ai binary
-  #[arg(skip = env!("CARGO_PKG_VERSION"))]
-  pub version: String,
 }
 
 #[derive(Debug, Subcommand)]
@@ -63,8 +57,8 @@ enum Commands {
 fn main() -> anyhow::Result<()> {
   let command = Command::parse();
   match command.command {
-    Commands::Commit(args) => cmd::commit::main(command.env, args),
-    Commands::PullRequest(args) => cmd::pull_request::main(command.env, args),
-    Commands::Update(args) => cmd::update::main(command.env, args),
+    Commands::Commit(args) => cmd::commit::main(args),
+    Commands::PullRequest(args) => cmd::pull_request::main(args),
+    Commands::Update(args) => cmd::update::main(args),
   }
 }

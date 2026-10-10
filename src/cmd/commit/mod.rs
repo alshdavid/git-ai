@@ -16,21 +16,24 @@ pub struct CommitCommand {
 
   #[arg(long = "dry")]
   pub dry_run: bool,
+
+  #[command(flatten)]
+  pub env: EnvConfig,
 }
 
-pub fn main(
-  env: EnvConfig,
-  args: CommitCommand,
-) -> anyhow::Result<()> {
+pub fn main(args: CommitCommand) -> anyhow::Result<()> {
   let diffs = crate::platform::git::get_staged_diff(args.max_lines_per_file)?;
   let rendered = prompt::user(&diffs)?;
 
   println!("{}", rendered);
 
+  let openai_api_url = args.env.openai_api_url;
+  let model = args.env.model_id;
+
   let options = OpenAIConversationOptions {
-    openai_api_url: env.openai_api_url,
-    openai_api_token: env.openai_api_token,
-    model: env.model_id,
+    openai_api_url,
+    openai_api_token: args.env.openai_api_token,
+    model,
     system_prompt: Some(prompt::system().to_string()),
     reasoning_effort: args.reasoning_effort,
   };

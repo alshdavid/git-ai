@@ -1,4 +1,11 @@
-use crate::EnvConfig;
+use crate::self_upgrade::LatestRelease;
+use crate::self_upgrade::UpgradeOptions;
+use crate::self_upgrade::UpgradeOutcome;
+use crate::self_upgrade::check_for_update;
+use crate::self_upgrade::try_upgrade;
+
+const TARGET_REPO: &str = "alshdavid/git-ai";
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Debug, clap::Parser)]
 pub struct UpdateCommand {
@@ -11,9 +18,37 @@ pub struct UpdateCommand {
   pub check: bool,
 }
 
-pub fn main(
-  env: EnvConfig,
-  args: UpdateCommand,
-) -> anyhow::Result<()> {
+pub fn main(args: UpdateCommand) -> anyhow::Result<()> {
+  let options = UpgradeOptions {
+    target_repo: TARGET_REPO,
+    current_version: VERSION,
+  };
+
+  if args.check {
+    match check_for_update(&options)? {
+      LatestRelease::Prerelease => println!("{}", prerelease()),
+      LatestRelease::UpToDate => println!("{}", up_to_date()),
+      LatestRelease::Available(version) => {
+        println!("Update available: {} -> {}", VERSION, version)
+      }
+    }
+
+    return Ok(());
+  }
+
+  match try_upgrade(&options, args.force)? {
+    UpgradeOutcome::Prerelease => println!("{}", prerelease()),
+    UpgradeOutcome::UpToDate => println!("{}", up_to_date()),
+    UpgradeOutcome::Updated(version) => println!("Updated git-ai to {version}"),
+  }
+
   Ok(())
+}
+
+fn prerelease() -> String {
+  format!("Skipping update, running a pre-release build ({VERSION})")
+}
+
+fn up_to_date() -> String {
+  format!("Already on the latest version ({VERSION})")
 }
